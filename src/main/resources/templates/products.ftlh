@@ -12,7 +12,8 @@
 <table>
     <#list products as product>
         <tr>
-            <td><a href="/product/${product.id}"><img src="/static${product.imagePath}" alt="Product Image" width="100" height="100"></a></td>
+            <td><a href="/product/${product.id?c}"><img src="/static${product.imagePath}" alt="Product Image" width="100" height="100"></a></td>
+            <td>${product.id}</td>
             <td>${product.nameBurger}</td>
             <td>${product.price}</td>
         </tr>

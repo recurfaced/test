@@ -32,5 +32,36 @@
         <li>${nutritionalValue.squirrels}</li>
     </#list>
 </ul>
+<form action="/product/all" method="get">
+
+    <button id="addToCartBtn">в корзину</button>
+
+    <script>
+        document.getElementById("addToCartBtn").addEventListener("click", function() {
+            var products = JSON.parse(localStorage.getItem("products")) || {};
+
+            var product = {
+                productId: "${products.id}",
+                ingredients: [
+                    <#list products.ingredients as ingredient>
+                    {
+                        ingredientId: "${ingredient.id}"
+                    },
+                    </#list>
+                ],
+                nutritionalValues: [
+                    <#list products.nutritionalValues as nutritionalValue>
+                    {
+                        nutritionalValueId: "${nutritionalValue.id}"
+                    },
+                    </#list>
+                ],
+            };
+
+            products[product.productId] = JSON.stringify(product);
+            localStorage.setItem("products", JSON.stringify(products));
+        });
+    </script>
+</form>
 </body>
 </html>

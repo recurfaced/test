@@ -33,11 +33,15 @@ public class Product {
     @Column(name = "imagePath")
     private String imagePath;
 
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "product")
     private List<NutritionalValue> nutritionalValues = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "product")
     private List<Ingredient> ingredients = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    private Order order;
     public void addIngredientToProduct(Ingredient ingredient) {
         ingredient.setProduct(this);
         ingredients.add(ingredient);
