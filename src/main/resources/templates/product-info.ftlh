@@ -32,16 +32,22 @@
         <li>${nutritionalValue.squirrels}</li>
     </#list>
 </ul>
+
+<p>Количество: <span id="countDisplay">0</span></p>
+<button id="incrementBtn">+</button>
+<button id="decrementBtn">-</button>
 <form action="/product/all" method="get">
-
     <button id="addToCartBtn">в корзину</button>
-
     <script>
         document.getElementById("addToCartBtn").addEventListener("click", function() {
             var products = JSON.parse(localStorage.getItem("products")) || {};
 
+            var count = parseInt(document.getElementById("countDisplay").innerText);
+
             var product = {
                 productId: "${products.id}",
+                count: count,
+
                 ingredients: [
                     <#list products.ingredients as ingredient>
                     {
@@ -59,9 +65,32 @@
             };
 
             products[product.productId] = JSON.stringify(product);
-            localStorage.setItem("products", JSON.stringify(products));
+            /*localStorage.setItem("products", JSON.stringify(products));*/
+            localStorage.products = JSON.stringify(products);
         });
     </script>
 </form>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var count = 0;
+        var countDisplay = document.getElementById("countDisplay");
+
+        document.getElementById("incrementBtn").addEventListener("click", function() {
+            count++;
+            countDisplay.innerText = count;
+        });
+
+        document.getElementById("decrementBtn").addEventListener("click", function() {
+            if (count > 0) {
+                count--;
+                countDisplay.innerText = count;
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -13,6 +13,19 @@ import java.util.List;
 @Data
 @Table(name = "Orders")
 public class Order {
+    public Order(Order other) {
+        this.id = other.id;
+        this.deliveryName = other.deliveryName;
+        this.deliveryStreet = other.deliveryStreet;
+        this.deliveryCity = other.deliveryCity;
+        this.deliveryApartment = other.deliveryApartment;
+        this.ccNumber = other.ccNumber;
+        this.ccExpiration = other.ccExpiration;
+        this.ccCVV = other.ccCVV;
+        this.productName = other.productName;
+        this.userPhone = other.userPhone;
+        this.received = other.received;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,9 +45,13 @@ public class Order {
 
     private String ccCVV;
 
-    private String productId;
+    private String productName;
 
     private String userPhone;
+
+    private boolean received;
+
+    private Integer count;
 
     @ManyToOne
     private User user;
@@ -45,6 +62,10 @@ public class Order {
     private List<User> users = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "order")
     private List<Product> products = new ArrayList<>();
+
+    public Order() {
+
+    }
 
     @PrePersist
     private void init() {

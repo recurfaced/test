@@ -42,6 +42,12 @@ public class Product {
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Order order;
+
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn
+    private Topping topping;
+
     public void addIngredientToProduct(Ingredient ingredient) {
         ingredient.setProduct(this);
         ingredients.add(ingredient);
