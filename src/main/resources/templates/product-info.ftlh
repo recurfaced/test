@@ -46,6 +46,8 @@
 
             var product = {
                 productId: "${products.id}",
+                productName: "${products.nameBurger}",
+                price:"${products.price}",
                 count: count,
 
                 ingredients: [
@@ -65,7 +67,7 @@
             };
 
             products[product.productId] = JSON.stringify(product);
-            /*localStorage.setItem("products", JSON.stringify(products));*/
+
             localStorage.products = JSON.stringify(products);
         });
     </script>
