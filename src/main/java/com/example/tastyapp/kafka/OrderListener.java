@@ -15,7 +15,7 @@ public class OrderListener {
         this.ui = ui;
     }
 
-    @KafkaListener(topics = "testy.orders.topic",groupId = "test-consumer-group")
+    @KafkaListener(topics = "my-topic",groupId = "test-consumer-group")
     public void handle(List<ProductData> productDataList){
         ui.displayOrder(productDataList);
     }

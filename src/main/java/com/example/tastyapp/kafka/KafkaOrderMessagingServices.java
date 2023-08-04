@@ -19,6 +19,6 @@ public class KafkaOrderMessagingServices implements OrderMessagingServices {
 
     @Override
     public void sendOrder(List<ProductData> productDataList) {
-        kafkaTemplate.sendDefault(productDataList);
+        kafkaTemplate.send("my-topic", productDataList);
     }
 }
