@@ -37,6 +37,7 @@ public class ProductController {
                                 Product product,
                                 Ingredient ingredient, NutritionalValue nutritionalValue) throws IOException {
         productService.saveBurger(file,product,ingredient,nutritionalValue);
+
         return "redirect:/";
     }
     @GetMapping("/product/{id}")

@@ -1,5 +1,5 @@
 package com.example.tastyapp.controller;
-
+import com.example.tastyapp.configurations.test.ChefWebSocketController;
 import com.example.tastyapp.kafka.KafkaOrderMessagingServices;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.example.tastyapp.models.Order;
@@ -7,6 +7,7 @@ import com.example.tastyapp.services.OrderServices;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +26,9 @@ public class OrderController {
 
     private final OrderServices orderServices;
     private final KafkaOrderMessagingServices kafkaOrderMessagingServices;
+    private final ChefWebSocketController chefWebSocketController;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
 
     @GetMapping("/order")
     public String order() {
@@ -32,7 +36,7 @@ public class OrderController {
     }
 
     @PostMapping("/order/create")
-    public String createOrder(Model model, @RequestBody MultiValueMap<String, String> formData, Order order) {
+    public String createOrder(Model model, @RequestBody MultiValueMap<String, String> formData, Order order) throws Exception {
 
         String productDataListJson = formData.getFirst("productData");
 
@@ -48,10 +52,13 @@ public class OrderController {
 
 
         kafkaOrderMessagingServices.sendOrder(productList);
+        simpMessagingTemplate.convertAndSend("/my-topic", productList);
+        /*chefWebSocketController.sendOrder(productList);
+        log.info("хуйня " + productList);*/
 
         // orderServices.saveOrder(order,productList);
-        model.addAttribute("order",order);
-        model.addAttribute("productList",productList);
+        model.addAttribute("order", order);
+        model.addAttribute("productList", productList);
         return "delivery";
     }
 }

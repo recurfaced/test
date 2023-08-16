@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat WebSocket</title>
+    <title>Chef Orders</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script type="text/javascript">
         var stompClient = null;
 
-        function setConnected(connected) {
-            document.getElementById('connect').disabled = connected;
-            document.getElementById('disconnect').disabled = !connected;
-            document.getElementById('conversationDiv').style.visibility
-                = connected ? 'visible' : 'hidden';
-            document.getElementById('response').innerHTML = '';
-        }
-
         function connect() {
-            var socket = new SockJS('/chat');
+            console.log("connecting working");
+            disconnect();
+            var socket = new SockJS('/chef');
             stompClient = Stomp.over(socket);
+            console.log("15 work");
             stompClient.connect({}, function(frame) {
-                setConnected(true);
-                console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/messages', function(messageOutput) {
-                    showMessageOutput(JSON.parse(messageOutput.body));
+                console.log("17");
+                stompClient.subscribe('/my-topic', function(order) {
+                    console.log("Received order: " + JSON.parse(order.body));
+                    showOrder(JSON.parse(order.body));
                 });
+                console.log("23");
             });
         }
 
@@ -31,43 +27,30 @@
             if(stompClient != null) {
                 stompClient.disconnect();
             }
-            setConnected(false);
-            console.log("Disconnected");
         }
 
-        function sendMessage() {
-            var productName = document.getElementById('productName').value;
-            stompClient.send("/app/chat", {},
-                JSON.stringify({'productName': productName}));
-        }
-
-        function showMessageOutput(messageOutput) {
+        function showOrder(order) {
+            console.log("showOrder working:" + order);
             var response = document.getElementById('response');
             var p = document.createElement('p');
             p.style.wordWrap = 'break-word';
-            p.appendChild(document.createTextNode(messageOutput.productName + " (" + messageOutput.time + ")"));
+
+            for (var i = 0; i < order.length; i++) {
+                var item = order[i];
+                var itemText = "Product: " + item.productName + ", Count: " + item.count + ", Price: " + item.price;
+                var itemElement = document.createElement('div');
+                itemElement.appendChild(document.createTextNode(itemText));
+                p.appendChild(itemElement);
+            }
+
             response.appendChild(p);
         }
     </script>
 </head>
-<body onload="disconnect()">
+<body onload="console.log('Connecting to WebSocket...'); connect()" onunload="disconnect()">
 <div>
-    <div>
-        <input type="text" id="productName" placeholder="Enter a product name"/>
-    </div>
-    <br />
-    <div>
-        <button id="connect" onclick="connect();">Connect</button>
-        <button id="disconnect" disabled="disabled" onclick="disconnect();">
-            Disconnect
-        </button>
-    </div>
-    <br />
-    <div id="conversationDiv">
-        <button id="sendMessage" onclick="sendMessage();">Send Product Name</button>
-        <p id="response"></p>
-    </div>
+    <h1>Chef Orders</h1>
+    <div id="response"></div>
 </div>
-
 </body>
 </html>

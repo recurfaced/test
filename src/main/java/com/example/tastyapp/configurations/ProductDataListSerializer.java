@@ -1,7 +1,9 @@
 package com.example.tastyapp.configurations;
 
 import com.example.tastyapp.controller.ProductData;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -14,7 +16,10 @@ public class ProductDataListSerializer implements Serializer<List<ProductData>> 
         try {
             return objectMapper.writeValueAsBytes(data);
         } catch (Exception e) {
-            throw new RuntimeException("Error serializing ProductData list", e);
+            // Handle serialization error more gracefully
+            e.printStackTrace();
+            return null; // Or throw a custom exception
         }
     }
 }
+
