@@ -1,4 +1,4 @@
-package com.example.tastyapp.configurations;
+package com.example.tastyapp.security;
 
 import com.example.tastyapp.services.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;

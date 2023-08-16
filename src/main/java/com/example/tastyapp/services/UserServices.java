@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -24,5 +27,13 @@ public class UserServices {
         log.info("Новый юзер создан с емайлом: {}", email);
         userRepository.save(user);
         return true;
+    }
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+
+        return userRepository.findByEmail(principal.getName());
+    }
+    public List<User> list(){
+        return userRepository.findAll();
     }
 }
