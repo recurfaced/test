@@ -23,7 +23,7 @@ public class UserServices {
         if (userRepository.findByEmail(email) != null) return false;
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.ROLE_USER);
+        user.getRoles().add(Role.ROLE_CHEF);
         log.info("Новый юзер создан с емайлом: {}", email);
         userRepository.save(user);
         return true;

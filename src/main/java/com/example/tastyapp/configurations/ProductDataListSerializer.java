@@ -16,9 +16,8 @@ public class ProductDataListSerializer implements Serializer<List<ProductData>> 
         try {
             return objectMapper.writeValueAsBytes(data);
         } catch (Exception e) {
-            // Handle serialization error more gracefully
             e.printStackTrace();
-            return null; // Or throw a custom exception
+            return null;
         }
     }
 }

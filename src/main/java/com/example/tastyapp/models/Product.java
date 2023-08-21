@@ -34,6 +34,10 @@ public class Product {
     private String imagePath;
 
 
+    @Column(name = "productType")
+    private String productType;
+
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "product")
     private List<NutritionalValue> nutritionalValues = new ArrayList<>();
 

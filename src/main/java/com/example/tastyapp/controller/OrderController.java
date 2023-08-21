@@ -1,5 +1,6 @@
 package com.example.tastyapp.controller;
-import com.example.tastyapp.configurations.test.ChefWebSocketController;
+import com.example.tastyapp.services.ChefServices;
+import com.example.tastyapp.websocket.ChefWebSocketController;
 import com.example.tastyapp.kafka.KafkaOrderMessagingServices;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.example.tastyapp.models.Order;
@@ -28,6 +29,8 @@ public class OrderController {
     private final KafkaOrderMessagingServices kafkaOrderMessagingServices;
     private final ChefWebSocketController chefWebSocketController;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ChefServices chefServices;
+    private final AdminController adminController;
 
 
     @GetMapping("/order")
@@ -50,15 +53,22 @@ public class OrderController {
             e.printStackTrace();
         }
 
+        String chefUsername = chefServices.determineChefForOrder(productList);
+        log.info(chefUsername);
+
 
         kafkaOrderMessagingServices.sendOrder(productList);
-        simpMessagingTemplate.convertAndSend("/my-topic", productList);
-        /*chefWebSocketController.sendOrder(productList);
-        log.info("хуйня " + productList);*/
 
-        // orderServices.saveOrder(order,productList);
+        simpMessagingTemplate.convertAndSend("/my-topic", productList);
+
+
+       // orderServices.saveOrder(order,productList);
+
         model.addAttribute("order", order);
+
+
         model.addAttribute("productList", productList);
+
         return "delivery";
     }
 }

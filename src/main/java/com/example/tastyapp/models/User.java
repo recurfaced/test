@@ -47,6 +47,9 @@ public class User implements UserDetails {
         return roles.contains(Role.ROLE_ADMIN);
     }
 
+    public boolean isChef(){return roles.contains(Role.ROLE_CHEF);}
+    public boolean isChef1(){return roles.contains(Role.ROLE_CHEF1);}
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;

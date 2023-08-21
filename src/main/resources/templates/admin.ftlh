@@ -25,6 +25,14 @@
     Жиры: <input type="number" name="fats"/><br><br>
     Белки: <input type="number" name="squirrels"/><br><br>
     Углеводы: <input type="number" name="carbs"/><br><br>
+
+    <select name="productType">
+        <option value="cold_appetizers">Холодные закуски</option>
+        <option value="salads">Салат</option>
+        <option value="hot_dishes">Горячее</option>
+    </select>
+    <br><br>
+
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Добавить товар"/>
 </form>

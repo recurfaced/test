@@ -1,4 +1,4 @@
-package com.example.tastyapp.configurations.test;
+package com.example.tastyapp.websocket;
 
 import com.example.tastyapp.controller.ProductData;
 
@@ -18,4 +18,5 @@ public class OrderMessage {
     public void setContent(List<ProductData> content) {
         this.content = content;
     }
+    
 }

@@ -1,12 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Your head content here -->
 </head>
 <body>
-<!-- Your form content here -->
 <form action="/order/create" method="post" enctype="application/json" onsubmit="setProductId()">
-    <!-- Your form inputs for delivery information -->
     Заказ: <input type="text" name="deliveryName"/><br>
     Город: <input type="text" name="deliveryCity"/><br>
     Улица: <input type="text" name="deliveryStreet"/><br>
@@ -15,7 +12,6 @@
     ccExpiration: <input type="text" name="ccExpiration"/><br><br>
     ccCVV: <input type="text" name="ccCVV"/><br><br>
 
-    <!-- Hidden input field for productData -->
     <input type="hidden" name="productData" id="productData" value="">
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Оформить заказ"/>
@@ -38,6 +34,7 @@
                         productName: product.productName,
                         price: product.price,
                         count: product.count,
+
                     };
                     productData.push(productObject);
                 });

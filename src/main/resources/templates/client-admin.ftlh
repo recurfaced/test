@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chef Orders</title>
+    <title>Admin orders</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script type="text/javascript">
@@ -10,7 +10,7 @@
         function connect() {
             console.log("connecting working");
             disconnect();
-            var socket = new SockJS('/chef');
+            var socket = new SockJS('/client-admin');
             stompClient = Stomp.over(socket);
             console.log("15 work");
             stompClient.connect({}, function(frame) {
@@ -33,7 +33,6 @@
             console.log("showOrder working:" + order);
             var response = document.getElementById('response');
 
-
             for (var i = 0; i < order.length; i++) {
                 var item = order[i];
                 var itemContainer = document.createElement('div');
@@ -44,36 +43,25 @@
                 itemElement.appendChild(document.createTextNode(itemText));
                 itemContainer.appendChild(itemElement);
 
-                var processButton = document.createElement('button');
-                processButton.textContent = "В процессе";
-                processButton.onclick = function() {
-                    asProcessing(i);
-                };
-                itemContainer.appendChild(processButton);
-
-                var readyButton = document.createElement('button');
-                readyButton.textContent = "Готово";
-                readyButton.onclick = function() {
-                    asReady(i);
-                };
-                itemContainer.appendChild(readyButton);
-
                 response.appendChild(itemContainer);
             }
+
+            // Создаем кнопку "Подтвердить заказ" и добавляем обработчик для нее
+            var confirmButton = document.createElement('button');
+            confirmButton.textContent = 'Подтвердить заказ';
+            confirmButton.addEventListener('click', function() {
+                // Здесь можно добавить логику для подтверждения заказа
+                alert('Заказ подтвержден!');
+            });
+
+            response.appendChild(confirmButton);
         }
 
-        function asProcessing(index){
-            console.log("заказ "+index+"в процессе приготовления");
-        }
-
-        function asReady(index){
-            console.log("заказ "+index+"готов");
-        }
     </script>
 </head>
 <body onload="console.log('Connecting to WebSocket...'); connect()" onunload="disconnect()">
 <div>
-    <h1>Chef Orders</h1>
+    <h1>Admin Orders</h1>
     <div id="response"></div>
 </div>
 </body>

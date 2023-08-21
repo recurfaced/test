@@ -18,15 +18,14 @@
     <#if user.isAdmin()>
         <a href="/admin-control">Панель администратора</a>
     </#if>
+
+    <#if user.isChef()>
+        <a href="/chef">Страничка повара</a>
+    </#if>
+    
 <#else>
     <a href="/login">Войти</a>
 </#if>
 
-
-
-
-<#--<form action="/admin" method="get">
-    <button>перейти к панели админа</button>
-</form>-->
 </body>
 </html>
