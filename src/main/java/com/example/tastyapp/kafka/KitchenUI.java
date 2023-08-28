@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @Slf4j
 public class KitchenUI {
-    public void displayOrder(List<ProductData> productDataList){
-        log.info("получено: " + productDataList);
+
+    public void displayOrder(List<ProductData> productDataList) {
+        log.info("Получено: " + productDataList);
     }
 }

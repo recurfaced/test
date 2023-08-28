@@ -1,6 +1,7 @@
 package com.example.tastyapp.models;
 
 
+import com.example.tastyapp.controller.ProductData;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Table(name = "Orders")
 public class Order {
+
     public Order(Order other) {
         this.id = other.id;
         this.deliveryName = other.deliveryName;
@@ -63,6 +65,8 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "order")
     private List<Product> products = new ArrayList<>();
 
+
+
     public Order() {
 
     }
@@ -78,5 +82,6 @@ public class Order {
     public void addProductToOrder(Product product) {
         product.setOrder(this);
     }
+
 
 }

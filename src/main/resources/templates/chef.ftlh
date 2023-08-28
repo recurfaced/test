@@ -8,34 +8,34 @@
         var stompClient = null;
 
         function connect() {
-            console.log("connecting working");
+            console.log("Connecting to WebSocket...");
             disconnect();
             var socket = new SockJS('/chef');
             stompClient = Stomp.over(socket);
-            console.log("15 work");
             stompClient.connect({}, function(frame) {
-                console.log("17");
+                console.log("Connected to WebSocket");
                 stompClient.subscribe('/my-topic', function(order) {
-                    console.log("Received order: " + JSON.parse(order.body));
-                    showOrder(JSON.parse(order.body));
+                    console.log("заказ пришел" + order.body);
+                    var orderData = JSON.parse(order.body);
+                    console.log("Received order: ", orderData);
+                    showOrder(orderData);
                 });
-                console.log("23");
             });
         }
 
         function disconnect() {
             if(stompClient != null) {
                 stompClient.disconnect();
+                console.log("Disconnected from WebSocket");
             }
         }
 
-        function showOrder(order) {
-            console.log("showOrder working:" + order);
-            var response = document.getElementById('response');
+        function showOrder(orderData) {
+            console.log("showOrder working:", orderData);
+            var productListContainer = document.getElementById('product-list-container');
 
-
-            for (var i = 0; i < order.length; i++) {
-                var item = order[i];
+            for (var i = 0; i < orderData.length; i++) {
+                var item = orderData[i];
                 var itemContainer = document.createElement('div');
                 itemContainer.classList.add('product-item');
 
@@ -46,35 +46,42 @@
 
                 var processButton = document.createElement('button');
                 processButton.textContent = "В процессе";
-                processButton.onclick = function() {
-                    asProcessing(i);
-                };
+                processButton.onclick = (function(index) {
+                    return function() {
+                        asProcessing(index);
+                    };
+                })(i);
+
                 itemContainer.appendChild(processButton);
 
                 var readyButton = document.createElement('button');
                 readyButton.textContent = "Готово";
-                readyButton.onclick = function() {
-                    asReady(i);
-                };
+                readyButton.onclick = (function(index) {
+                    return function() {
+                        asReady(index);
+                    };
+                })(i);
+
                 itemContainer.appendChild(readyButton);
 
-                response.appendChild(itemContainer);
+                productListContainer.appendChild(itemContainer);
             }
         }
 
         function asProcessing(index){
-            console.log("заказ "+index+"в процессе приготовления");
+            console.log("заказ " + index + " в процессе приготовления");
         }
 
         function asReady(index){
-            console.log("заказ "+index+"готов");
+            console.log("заказ "+index+" готов");
         }
     </script>
 </head>
-<body onload="console.log('Connecting to WebSocket...'); connect()" onunload="disconnect()">
+<body onload="connect()" onunload="disconnect()">
 <div>
     <h1>Chef Orders</h1>
-    <div id="response"></div>
+    <div id="product-list-container">
+    </div>
 </div>
 </body>
 </html>

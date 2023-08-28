@@ -23,7 +23,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic ordersTopic() {
-        return TopicBuilder.name("my-topic")
+        return TopicBuilder.name("admin-topic")
                 .partitions(1)
                 .replicas(1)
                 .build();
