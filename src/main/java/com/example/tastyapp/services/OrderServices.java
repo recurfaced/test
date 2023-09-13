@@ -21,6 +21,7 @@ public class OrderServices {
     private final OrderRepository repository;
     private final UserRepository userRepository;
     private final ProductServices productServices;
+    private final OrderRepository orderRepository;
 
     public void saveOrder(Order order, List<ProductData> productDataList) {
         log.info(String.valueOf(productDataList));
@@ -32,6 +33,7 @@ public class OrderServices {
 
             Long productId = productData.getProductId();
             int count = productData.getCount();
+            int price = (int) productData.getPrice();
 
             Product product = productServices.getProductById(productId);
 
@@ -41,13 +43,46 @@ public class OrderServices {
 
                 newOrder.setUserPhone(userPhone);
 
+                newOrder.setUserOrderId(((User) principal).getId());
+
                 newOrder.setProductName(product.getNameBurger());
 
                 newOrder.setCount(count);
+                newOrder.setPrice(price);
 
                 Order savedOrder = repository.save(newOrder);
             }
         }
     }
 
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findOrderByUserOrderId(userId);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

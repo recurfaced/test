@@ -23,5 +23,6 @@ public class AdminWebSocketController {
     @SendTo("/admin-topic")
     public void receiveOrder(Order order) {
 
+        log.info("хуй хуй хуй хуй хуй");
     }
 }

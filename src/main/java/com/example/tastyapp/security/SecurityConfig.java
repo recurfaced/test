@@ -20,10 +20,10 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/products/**","registration").permitAll()
+                        .requestMatchers("/", "/product/**","registration").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
+
 
 
         return http.build();

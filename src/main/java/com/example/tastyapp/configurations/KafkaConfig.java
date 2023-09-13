@@ -30,6 +30,26 @@ public class KafkaConfig {
     }
 
     @Bean
+    public NewTopic chefTopic() {
+        return TopicBuilder.name("my-topic")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+
+    // можно и так сделать по новому так сказать
+    /*@Bean
+    public KafkaAdmin.NewTopics chdefTopic() {
+        return new KafkaAdmin.NewTopics(
+                TopicBuilder.name("admin-topic")
+                        .build(),
+                TopicBuilder.name("my-topic")
+                        .build());
+    }*/
+
+
+    @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);

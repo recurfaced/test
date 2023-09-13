@@ -1,13 +1,11 @@
 package com.example.tastyapp.models;
 
 
-import com.example.tastyapp.controller.ProductData;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -54,6 +52,9 @@ public class Order {
     private boolean received;
 
     private Integer count;
+    private Integer price;
+
+    private Long userOrderId;
 
     @ManyToOne
     private User user;
@@ -64,7 +65,6 @@ public class Order {
     private List<User> users = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "order")
     private List<Product> products = new ArrayList<>();
-
 
 
     public Order() {

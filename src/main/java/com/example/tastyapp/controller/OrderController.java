@@ -1,12 +1,15 @@
 package com.example.tastyapp.controller;
 import com.example.tastyapp.services.ChefServices;
 import com.example.tastyapp.kafka.KafkaOrderMessagingServices;
+import com.example.tastyapp.services.OrderServices;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.example.tastyapp.models.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -30,12 +33,14 @@ public class OrderController {
     private final KafkaOrderMessagingServices kafkaOrderMessagingServices;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChefServices chefServices;
+    private final OrderServices orderServices;
 
 
     @GetMapping("/order")
     public String order() {
         return "order";
     }
+
 
     @PostMapping("/order/create")
     public String createOrder(Model model, @RequestBody MultiValueMap<String, String> formData, Order order) throws Exception {
@@ -51,6 +56,7 @@ public class OrderController {
             log.info("пусто: " + productDataListJson);
             e.printStackTrace();
         }
+        log.info(order.toString());
 
         String chefUsername = chefServices.determineChefForOrder(productList);
         log.info(chefUsername);
@@ -59,11 +65,14 @@ public class OrderController {
         orderData.put("productList", productDataListJson);
 
 
+
+
+        log.info("лист"+ productList);
         kafkaOrderMessagingServices.sendOrder(productList);
 
         //simpMessagingTemplate.convertAndSend("/my-topic", productList);
         simpMessagingTemplate.convertAndSend("/admin-topic", orderData);
-        // orderServices.saveOrder(order,productList);
+        //orderServices.saveOrder(order,productList);
 
         model.addAttribute("order", order);
         model.addAttribute("productList", productList);

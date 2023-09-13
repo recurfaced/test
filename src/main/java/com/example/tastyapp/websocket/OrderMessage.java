@@ -1,9 +1,10 @@
 package com.example.tastyapp.websocket;
 
 import com.example.tastyapp.controller.ProductData;
+import lombok.Data;
 
 import java.util.List;
-
+@Data
 public class OrderMessage {
     private List<ProductData> content;
 

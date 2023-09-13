@@ -6,6 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script type="text/javascript">
         var stompClient = null;
+        var productList = [];
 
         function connect() {
             console.log("Connecting to WebSocket...");
@@ -15,10 +16,13 @@
             stompClient.connect({}, function(frame) {
                 console.log("Connected to WebSocket");
                 stompClient.subscribe('/my-topic', function(order) {
-                    console.log("заказ пришел" + order.body);
-                    var orderData = JSON.parse(order.body);
-                    console.log("Received order: ", orderData);
-                    showOrder(orderData);
+                    var data = JSON.parse(order.body);
+                    console.log("прилетело"+ order.body);
+                    var newProductList = data;
+                    console.log("Новый лист "+ newProductList)
+                    productList = newProductList;
+                    console.log("лист: " + productList)
+                    displayProductList(productList);
                 });
             });
         }
@@ -30,51 +34,23 @@
             }
         }
 
-        function showOrder(orderData) {
-            console.log("showOrder working:", orderData);
+        function displayProductList(productList) {
+            console.log("Отображение списка продуктов:", productList);
             var productListContainer = document.getElementById('product-list-container');
 
-            for (var i = 0; i < orderData.length; i++) {
-                var item = orderData[i];
-                var itemContainer = document.createElement('div');
-                itemContainer.classList.add('product-item');
+            productList.forEach(function(product) {
+                console.log("Обработка продукта:", product);
+                var productElement = document.createElement('div');
+                productElement.innerHTML = "<p>Продукт: " + product.productName + "</p>" +
+                    "<p>Цена: " + product.price + "</p>" +
+                    "<p>Количество: " + product.count + "</p>";
 
-                var itemText = "Название продукта: " + item.productName + ", Количество: " + item.count + ", Цена: " + item.price;
-                var itemElement = document.createElement('p');
-                itemElement.appendChild(document.createTextNode(itemText));
-                itemContainer.appendChild(itemElement);
-
-                var processButton = document.createElement('button');
-                processButton.textContent = "В процессе";
-                processButton.onclick = (function(index) {
-                    return function() {
-                        asProcessing(index);
-                    };
-                })(i);
-
-                itemContainer.appendChild(processButton);
-
-                var readyButton = document.createElement('button');
-                readyButton.textContent = "Готово";
-                readyButton.onclick = (function(index) {
-                    return function() {
-                        asReady(index);
-                    };
-                })(i);
-
-                itemContainer.appendChild(readyButton);
-
-                productListContainer.appendChild(itemContainer);
-            }
+                productListContainer.appendChild(productElement);
+            });
         }
 
-        function asProcessing(index){
-            console.log("заказ " + index + " в процессе приготовления");
-        }
 
-        function asReady(index){
-            console.log("заказ "+index+" готов");
-        }
+
     </script>
 </head>
 <body onload="connect()" onunload="disconnect()">

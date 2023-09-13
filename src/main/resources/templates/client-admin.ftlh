@@ -21,6 +21,7 @@
         stompAdminClient.connect({}, function (frame) {
             stompAdminClient.subscribe('/admin-topic', function (orderData) {
                 var data = JSON.parse(orderData.body);
+                console.log("прилетело"+ orderData.body);
                 var newOrder = data.order;
                 var newProductList = data.productList;
 
@@ -44,9 +45,8 @@
 
     function displayProductList(productList) {
         var productListContainer = document.getElementById('product-list-container');
-        productListContainer.innerHTML = ''; // Очистим предыдущее содержимое
 
-        productList = JSON.parse(productList); // Преобразуем JSON-строку в объект
+        productList = JSON.parse(productList);
 
         productList.forEach(function(product) {
             var productElement = document.createElement('div');
@@ -57,19 +57,11 @@
             productListContainer.appendChild(productElement);
         });
 
-
-
-        var sendAllToChefButton = document.createElement('button');
-        sendAllToChefButton.textContent = "Отправить все заказы повару";
-        sendAllToChefButton.onclick = function() {
-            sendAllProductsToChef();
-        };
-        productListContainer.appendChild(sendAllToChefButton);
     }
 
     function sendAllProductsToChef() {
-        stompAdminClient.send('/my-topic', {}, JSON.stringify(productList));
-        console.log("Отправлено повару: " + JSON.stringify(productList));
+        stompAdminClient.send('/app/chef', {}, productList)
+        console.log("маму ебал" + productList)
     }
 
     connectAdminWebSocket();
@@ -77,6 +69,7 @@
 
 <div id="product-list-container">
 </div>
+<button onclick="sendAllProductsToChef()">Отправить заказ повару</button>
 
 </body>
 </html>
