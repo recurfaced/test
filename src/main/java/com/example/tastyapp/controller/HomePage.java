@@ -21,4 +21,8 @@ public class HomePage {
         model.addAttribute("user",userServices.getUserByPrincipal(principal));
         return "home";
     }
+    @GetMapping("/index")
+    public String testPage(){
+        return "index";
+    }
 }

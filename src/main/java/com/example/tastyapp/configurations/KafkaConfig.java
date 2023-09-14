@@ -56,6 +56,7 @@ public class KafkaConfig {
         return new KafkaAdmin(configs);
     }
 
+
     @Bean
     public ProducerFactory<String, List<ProductData>> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();

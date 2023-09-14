@@ -14,6 +14,7 @@
 <script>
     var stompAdminClient = null;
     var productList = [];
+    var isButtonVisible = false; // Флаг для отслеживания видимости кнопки
 
     function connectAdminWebSocket() {
         var socket = new SockJS('/client-admin');
@@ -21,7 +22,7 @@
         stompAdminClient.connect({}, function (frame) {
             stompAdminClient.subscribe('/admin-topic', function (orderData) {
                 var data = JSON.parse(orderData.body);
-                console.log("прилетело"+ orderData.body);
+                console.log("прилетело" + orderData.body);
                 var newOrder = data.order;
                 var newProductList = data.productList;
 
@@ -29,6 +30,8 @@
 
                 displayOrder(newOrder);
                 displayProductList(productList);
+
+
             });
         });
     }
@@ -44,32 +47,41 @@
     }
 
     function displayProductList(productList) {
-        var productListContainer = document.getElementById('product-list-container');
+        var productListContainer = document.getElementById('orders-container');
 
         productList = JSON.parse(productList);
 
-        productList.forEach(function(product) {
+        productList.forEach(function (product) {
             var productElement = document.createElement('div');
             productElement.innerHTML = "<p>Продукт: " + product.productName + "</p>" +
                 "<p>Цена: " + product.price + "</p>" +
                 "<p>Количество: " + product.count + "</p>";
 
             productListContainer.appendChild(productElement);
+
+
         });
+
+        var confirmButton = document.createElement('button');
+        confirmButton.textContent = 'повару';
+        confirmButton.addEventListener('click', function() {
+            sendAllProductsToChef();
+            alert('Заказ подтвержден!');
+        });
+
+        productListContainer.appendChild(confirmButton);
 
     }
 
     function sendAllProductsToChef() {
-        stompAdminClient.send('/app/chef', {}, productList)
-        console.log("маму ебал" + productList)
+        stompAdminClient.send('/app/chef', {}, productList);
+        console.log("маму ебал" + productList);
     }
 
     connectAdminWebSocket();
 </script>
 
-<div id="product-list-container">
+<div id="orders-container">
 </div>
-<button onclick="sendAllProductsToChef()">Отправить заказ повару</button>
-
 </body>
 </html>
