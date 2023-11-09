@@ -16,7 +16,7 @@
 <h4>Заказы пользваотеля ${user.name}</h4>
 <#list orders as item>
     <div>
-        <b>${item.productName}</b> ${item.count} ${item.} руб. | <a href="/user/${user.id}">Подробнее...</a>
+        <b>${item.productName}</b> ${item.count} | <a href="/user/${user.id}">Подробнее...</a>
     </div>
 <#else>
     <h3>Товаров нет</h3>

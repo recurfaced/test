@@ -49,8 +49,6 @@
             });
         }
 
-
-
     </script>
 </head>
 <body onload="connect()" onunload="disconnect()">

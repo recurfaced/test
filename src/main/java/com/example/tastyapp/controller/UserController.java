@@ -2,15 +2,16 @@ package com.example.tastyapp.controller;
 
 import com.example.tastyapp.models.Order;
 import com.example.tastyapp.models.User;
+import com.example.tastyapp.repositories.OrderRepository;
+import com.example.tastyapp.repositories.UserRepository;
 import com.example.tastyapp.services.OrderServices;
 import com.example.tastyapp.services.UserServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class UserController {
 
     private final UserServices userService;
     private final OrderServices orderServices;
+    private final UserRepository userRepository;
 
     @GetMapping("/login")
     public String login() {
@@ -50,8 +52,16 @@ public class UserController {
         model.addAttribute("orders", userOrders);
         return "user-info";
     }
+    @PutMapping(path = "/admin/user/edit/{user}")
+    @ResponseStatus(HttpStatus.OK)
+    public User putOrder(@PathVariable("user") User user) {
+        log.info("работает");
+       Long id = user.getId();
+       log.info("user " + id + "был изменен номер");
+        user.setPhoneNumber("888888888");
+        return userRepository.save(user);
 
-
+    }
 }
 
 
